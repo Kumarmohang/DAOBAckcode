@@ -1,0 +1,1453 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "version": "1.0.0",
+    "title": "PB DAO Platform API's",
+    "description": "This document contains the list of apis, endpoints and signatures of the platform."
+  },
+  "servers": [
+    {
+      "url": "https://dev.pbdao.perpetualblock.io",
+      "description": "API HOST"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Proposal",
+      "description":"Proposal related APIs"
+    },
+    {
+      "name": "User",
+      "description":"User related APIs"
+    },
+    {
+      "name": "Admin",
+      "description":"Admin related APIs"
+    }
+  ],
+  "paths": {
+    "/api/v1/proposal": {
+      "post": {
+        "tags": ["Proposal"],
+        "description": "This API is used to create a new proposal",
+        "operationId": "Create proposal",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "in": "header",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "required": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/createProposal"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Proposal created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/proposalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proposal/": {
+      "get": {
+        "tags": ["Proposal"],
+        "description": "API for fetching all proposal list",
+        "operationId": "Get all proposals",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "in": "header",
+            "required": false
+          },
+          {
+            "example": "nft",
+            "name": "search",
+            "description": "Search keyword. It will matched with attributes tags, title, type , area of proposal",
+            "schema": {
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example": "10",
+            "name": "limit",
+            "description": "The number of records to return. The default value is 10.",
+            "schema": {
+              "default": 10,
+              "type": "integer"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example": "0",
+            "name": "offset",
+            "description": "The number of records to skip. The default value is 0.",
+            "schema": {
+              "default": 0,
+              "type": "integer"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example": "startDate_asc",
+            "name": "sort",
+            "description": "Proposal attribute with which record will be sorted.e.g - sort=startDate_asc",
+            "schema": {
+              "default": null,
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+
+          {
+            "example": "12/03/2022",
+            "name": "startDate",
+            "description": "start date attribute of proposal.This will be used to fetch proposal after certain start date",
+            "schema": {
+              "default": null,
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example": "12/03/2022",
+            "name": "endDate",
+            "description": "end date attribute of proposal.This will be used to fetch proposal after certain end date",
+            "schema": {
+              "default": null,
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example":"completed",
+            "name": "votingStatus",
+            "description": "This will be used to fetch proposal with certain voting",
+            "schema": {
+              "default": null,
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          },
+          {
+            "example":"Ongoing",
+            "name": "stage",
+            "description": "This will be used to fetch proposal in certain phase/stage",
+            "schema": {
+              "default": null,
+              "type": "string"
+            },
+            "in": "query",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Proposals fetched successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getAllProposalResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proposal/type": {
+      "get": {
+        "tags": ["Proposal"],
+        "description": "This API is used to fetch all proposal types",
+        "operationId": "Get proposal types",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "in": "header",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Proposal Types",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/proposalTypeResponse"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proposal/{proposalId}": {
+      "get": {
+        "tags": ["Proposal"],
+        "description": "This API is used to fetch individual proposal details by id",
+        "operationId": "Get proposal by id",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "in": "header",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "required": false
+          },
+          {
+            "name": "proposalId",
+            "in": "path",
+            "description": "proposal id",
+            "schema": {
+              "type": "string",
+              "example": "123e4567-e89b-12d3-a456-426614174000"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Proposal Details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getProposal"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proposal/{proposalId}/voteDetails": {
+      "get": {
+        "tags": ["Proposal"],
+        "description": "This API is used to fetch individual proposal vote details by id",
+        "operationId": "Get vote details of proposal by id",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "in": "header",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "required": false
+          },
+          {
+            "name": "proposalId",
+            "in": "path",
+            "description": "proposal id",
+            "schema": {
+              "type": "string",
+              "example": "123e4567-e89b-12d3-a456-426614174000"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Voting Details of proposal",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/getVoteDetails"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/proposal/lifecycle/{proposalId}": {
+      "get": {
+        "tags": ["Proposal"],
+        "description": "This API is used to fetch lifecycle of proposal by id",
+        "operationId": "Get lifecycle of proposal by id",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "in": "header",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "required": false
+          },
+          {
+            "name": "proposalId",
+            "in": "path",
+            "description": "proposal id",
+            "schema": {
+              "type": "string",
+              "example": "123e4567-e89b-12d3-a456-426614174000"
+            },
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Proposal Details",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/proposalStatusResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/login": {
+      "get": {
+        "tags": ["User"],
+        "description": "API for user login",
+        "operationId": "User login",
+        "parameters": [
+          {
+            "name": "Accept-Encoding",
+            "description": "The Accept-Encoding request HTTP header indicates the content encoding (usually a compression algorithm) that the client can understand.",
+            "schema": {
+              "type": "string",
+              "example": "gzip, deflate, br"
+            },
+            "in": "header",
+            "required": false
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/loginRequestData"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "User logged in successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/loginData"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid parameters/values. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error400Schema"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized request. The response contains the error message.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error401Schema"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "User don't have required permission",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error403Schema"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Proposal already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/error409Schema"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "loginRequestData":{
+        "type": "object",
+        "properties": {
+          "publicAddress": {
+            "type": "string",
+            "description": "public address of user",
+            "example": "0xD5022DDad83f37000f173f9242eA684f3d694cE3"
+          },
+          "signedData": {
+            "type": "string",
+            "description": "a hash of user details and nonce",
+            "example": "0x7317d06fc9645e4b15aa4a768d766b47fc19992aeb63d530290a394ce611fd95" 
+          }
+          }
+      },
+      "loginData": {
+        "type": "object",
+        "required": ["jwtToken", "isLoggedIn"],
+        "description": "Post Schema for user login",
+        "properties": {
+          "jwtToken": {
+            "type": "string",
+            "description": "Jwt Token of logged in user",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjUzM2U1N2Y4LWNjMjYtNDEwNi05NGU0LTg1NTQ0NzdkMWNkZiIsImlhdCI6MTY4MDE2Nzg4NiwiZXhwIjoxNjgxNDYzODg2fQ.gkoCSvTIw_Yyqrtg12sx6Wq0-4HrIrY3SHEdepU9AU4"
+          },
+          "isLoggedIn": {
+            "type": "string",
+            "description": "Flag indicating whether user is logged in or not",
+            "example": "True" 
+          }
+          }
+        },
+      "createProposal": {
+        "type": "object",
+        "required": ["title", "leadName", "contactEmail","summary","body","requiredFunding","fundingCurrency","startDate","endDate","stage"],
+        "description": "Post Schema for project creation",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "Title of the proposal",
+            "example": "Alzheimer's: Targeting tau protein in Alzheimer's disease."
+          },
+          "leadName": {
+            "type": "string",
+            "description": "Name of the primary team member of proposal",
+            "example": "John Doe"
+          },
+          "contactEmail": {
+            "type": "string",
+            "description": "Email of the primary team member of proposal",
+            "example": "johndoe@gmail.com"
+          },
+          "organisationWebsite": {
+            "type": "string",
+            "description": "Organisation Website",
+            "example": "sysmex.com"
+          },
+          "body": {
+            "type": "string",
+            "description": "Body of proposal. It is stringified json object with keys body, competative advantage, impact",
+            "example": "{body : Alzheimer's disease, the most common dementing illness, is a relentlessly progressive and fatal brain disorder that begins approximately 10–15 years before any symptoms manifest. More than 47 million people worldwide have Alzheimer's disease, and this number is expected to reach over 131 million by 2050. 1 With increasing prevalence, the global impact of the social, economic, and emotional costs associated with Alzheimer's disease is staggering, and the need for better treatments unquestionable, since currently approved medications provide only symptomatic benefit without affecting the underlying disease process. Despite remarkable advances in our understanding of the molecular pathogenesis of Alzheimer's disease, no new treatments have been approved globally in more than a decade., 'competative advantage': 'Loren epsum', 'impact':'Loren epsum' }"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of proposal",
+            "example": "Tau is the major microtubule associated protein (MAP) of a mature neuron. The other two neuronal MAPs are MAP1 and MAP2. "
+          },
+          "tags": {
+            "type": "string",
+            "description": "Tags given to proposal",
+            "example": "Alzheimer, Tau Protein, Biopharma."
+          },
+          "background":{
+            "type": "string",
+            "description": "Background text of proposal",
+            "example": "Tau accumulation and neurofibrillary tangles, like amyloid plaques, are not yet measurable with an available blood test, although research is ongoing.Moreover, the conditions cannot be visualized on a CT or MRI scan. However, PET scanning can identify and measure the amount of accumulation for either of these disease-related proteins. In the case of amyloid, the PET scan won’t identify the stage of dementia because of amyloid’s early accumulation. Tau PET scans, on the other hand, may in the future provide a biomarker measurement that will meaningfully indicate disease progression. Amyloid PET scan tracers, which are already FDA-approved, are often used now to screen candidates for AD clinical trials. They identify the presence of disease but are not useful for measuring disease progression. Tau PET scan tracers have been developed and evidence supports tau PET scanning as a biomarker that reflects the stage of neurodegeneration associated with Alzheimer’s Disease. The first of the tau PET tracers to be approved by the US FDA is F-18 flortaucipir. Many new AD clinical trials are including tau PET scans as a potential biomarker of disease severity."
+          },
+          "type":{
+            "type": "string",
+            "description":"Type of proposal",
+            "example":"Healthcare"
+          },
+          "requiredFunding":{
+            "type": "integer",
+            "description":"Required funding for proposal",
+            "example":"100000"
+          },
+          "fundingCurrency":{
+            "type": "string",
+            "description":"Currency of required funding for proposal",
+            "example":"USD"
+          },
+          "area":{
+            "type": "string",
+            "description":"Research area of proposal",
+            "example":"Medical Sciences"
+          },
+          "patentStatus":{
+            "type": "string",
+            "description":"Patent status of proposal. It will be either filed, not filed, pending, received",
+            "example":"Filed"
+          },
+          "startDate": {
+            "description": "Start date of proposal",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "endDate": {
+            "description": "End date of proposal",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "teamMembers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/teamMembers"
+            }
+          },
+          "proposalAssets":{
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/proposalAssets"
+            }
+          },
+          "timeline":{
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/timeline"
+            }
+          }
+        }
+      },
+      "teamMembers":{
+        "type": "object",
+        "required": ["name", "contact_email"],
+        "properties":{
+          "name":{
+            "type": "string",
+            "description": "Name of the team member",
+            "example": "John Doe"
+          },
+          "role":{
+            "type": "string",
+            "description": "Role of the team member",
+            "example": "Team Lead"
+          },
+          "contactEmail":{
+            "type": "string",
+            "description": "Contact Email of the team member",
+            "example": "Team Co-Lead"
+          },
+          "designation":{
+            "type": "string",
+            "description": "Designation of the team member",
+            "example": "Developer"
+          }
+        }
+      },
+      "proposalAssets":{
+        "type": "object",
+        "required": ["title","type"],
+        "properties":{
+          "title":{
+            "type": "string",
+            "description": "Title of the asset file",
+            "example": "Neurofibrillary tangles and Tau protein (Alzheimer)"
+          },
+          "type":{
+            "type": "string",
+            "description": "Type of asset file - Audio, Video, Link, Image etc",
+            "example": "Link"
+          },
+          "url":{
+            "type": "string",
+            "description": "link in case of external assets such as youtube link or any external website image otherwise null",
+            "example": "https://www.youtube.com/watch?v=bRJ70hvHW0Y"
+          }
+        }
+      },
+      "timeline":{
+        "type": "object",
+        "required": ["title","requiredFunding","status","startDate","endDate"],
+        "properties":{
+          "title":{
+            "type": "string",
+            "description": "Title of the timeline stage of proposal",
+            "example": "Pre-Clinical Studies: accumulation of beta amyloid in the brain of a person with AD is largely completed at an earlier clinical stage"
+          },
+          "requiredFunding":{
+            "type": "integer",
+            "description": "funding required at this stage of proposal",
+            "example": "500000"
+          },
+          "status":{
+            "type": "string",
+            "description": "Status of the stage of proposal.It can be Ongoing,completed,failed",
+            "example": "Ongoing"
+          },
+          "startDate": {
+            "description": "Start date of the proposal stage",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "endDate": {
+            "description": "End date of the proposal stage",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          }
+        }
+      },
+      "proposalUpdates":{
+        "type": "object",
+        "properties":{
+          "title": {
+            "description": "title of proposal update",
+            "type": "string",
+            "example": "IP-NFT Transfer Ceremony with Molecule & ApoptoSENS"
+          },
+          "description": {
+            "description": "description of proposal update",
+            "type": "string",
+            "example": "The vote has passed, the decision is made: ApoptoSENS will be the 5th research organisation to fund their longevity research via an IP-NFT."
+          },
+          "timestamp":{
+            "type": "string",
+            "description": "timestamp of proposal update",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "assetUrl":{
+            "type": "string",
+            "description": "image/video attached with proposal update",
+            "example": "https://www.youtube.com/watch?v=bRJ70hvHW0Y"
+          }
+        }
+      },
+      "proposal": {
+        "type": "object",
+        "description": "Post Schema for project creation",
+        "properties": {
+          "id":{
+            "type": "string",
+            "description":"id of created proposal",
+            "example":"7c27b43e-1733-4382-bd37-48ca39d719f2"
+          },
+          "title": {
+            "type": "string",
+            "description": "Title of the proposal",
+            "example": "Alzheimer's: Targeting tau protein in Alzheimer's disease."
+          },
+          "leadName": {
+            "type": "string",
+            "description": "Primary Proposal team member name",
+            "example": "John Doe"
+          },
+          "contactEmail": {
+            "type": "string",
+            "description": "email of primary proposal team member",
+            "example": "johndoe@gmail.com"
+          },
+          "organisationWebsite": {
+            "type": "string",
+            "description": "Organisation Website",
+            "example": "sysmex.com"
+          },
+          "body": {
+            "type": "string",
+            "description": "body of proposal. It is combination of body, competative advantage, impact",
+            "example": "{body : Alzheimer's disease, the most common dementing illness, is a relentlessly progressive and fatal brain disorder that begins approximately 10–15 years before any symptoms manifest. More than 47 million people worldwide have Alzheimer's disease, and this number is expected to reach over 131 million by 2050. 1 With increasing prevalence, the global impact of the social, economic, and emotional costs associated with Alzheimer's disease is staggering, and the need for better treatments unquestionable, since currently approved medications provide only symptomatic benefit without affecting the underlying disease process. Despite remarkable advances in our understanding of the molecular pathogenesis of Alzheimer's disease, no new treatments have been approved globally in more than a decade., 'competative advantage': 'Loren epsum', 'impact':'Loren epsum' }"
+          },
+          "summary": {
+            "type": "string",
+            "description": "Summary of proposal",
+            "example": "Tau is the major microtubule associated protein (MAP) of a mature neuron. The other two neuronal MAPs are MAP1 and MAP2. "
+          },
+          "tags": {
+            "type": "string",
+            "description": "Tags given to proposal",
+            "example": "Alzheimer, Tau Protein, Biopharma."
+          },
+          "background":{
+            "type": "string",
+            "description": "background text to proposal",
+            "example": "Tau accumulation and neurofibrillary tangles, like amyloid plaques, are not yet measurable with an available blood test, although research is ongoing.Moreover, the conditions cannot be visualized on a CT or MRI scan. However, PET scanning can identify and measure the amount of accumulation for either of these disease-related proteins. In the case of amyloid, the PET scan won’t identify the stage of dementia because of amyloid’s early accumulation. Tau PET scans, on the other hand, may in the future provide a biomarker measurement that will meaningfully indicate disease progression. Amyloid PET scan tracers, which are already FDA-approved, are often used now to screen candidates for AD clinical trials. They identify the presence of disease but are not useful for measuring disease progression. Tau PET scan tracers have been developed and evidence supports tau PET scanning as a biomarker that reflects the stage of neurodegeneration associated with Alzheimer’s Disease. The first of the tau PET tracers to be approved by the US FDA is F-18 flortaucipir. Many new AD clinical trials are including tau PET scans as a potential biomarker of disease severity."
+          },
+          "type":{
+            "type": "string",
+            "description":"type of proposal",
+            "example":"Healthcare"
+          },
+          "requiredFunding":{
+            "type": "integer",
+            "description":"Required funding for proposal",
+            "example":"100000"
+          },
+          "fundingCurrency":{
+            "type": "string",
+            "description":"Currency of required funding for proposal",
+            "example":"USD"
+          },
+          "area":{
+            "type": "string",
+            "description":"Research area of proposal",
+            "example":"Medical Sciences"
+          },
+          "patentStatus":{
+            "type": "string",
+            "description":"Patent Status of proposal. It will be either filed, pending,not filed, received",
+            "example":"Filed"
+          },
+          "startDate": {
+            "description": "Start date of proposal",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "endDate": {
+            "description": "End date of proposal",
+            "type": "string",
+            "example": "1970-01-20T02:58:48.163Z"
+          },
+          "stage": {
+            "description": "Stage of proposal",
+            "type": "string",
+            "example": "phase 1"
+          },
+          "currentStatus":{
+            "description": "Status of Proposal",
+            "type": "string",
+            "example": "Ongoing"
+          },
+          "teamMembers": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/teamMembers"
+            }
+          },
+          "proposalAssets":{
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/proposalAssets"
+            }
+          },
+          "timeline":{
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/timeline"
+            }
+          },
+          "snapshotUrl":{
+            "description": "Link to proposal created on snapshot",
+            "type": "string",
+            "example": "https://snapshot.org/#/vote.vitadao.eth/proposal/0xcafd8183c8ac4990d99d90b3bd669de2c86376aa361c2384b12d578a49f686c0"
+          }
+        }
+      },
+      "proposalResponse": {
+        "type": "object",
+        "required": ["data"],
+        "description": "Proposal create response object.",
+        "properties": {
+          "data": {
+            "$ref": "#/components/schemas/proposal"
+          }
+        }
+      },
+      "proposalTypes": {
+        "type": "object",
+        "required": ["name", "projectIdentifier", "payerId"],
+        "description": "Post Schema for project creation",
+        "properties": {
+          "id":{
+            "type": "string",
+            "description":"id of created proposal",
+            "example":"7c27b43e-1733-4382-bd37-48ca39d719f2"
+          },
+          "name": {
+            "type": "string",
+            "description": "Type name",
+            "example": "NFT"
+          },
+          "description": {
+            "type": "string",
+            "description": "description of type",
+            "example": "type of proposal related to NFTs, web3" 
+          }
+          }
+        },
+      "proposalTypeResponse": {
+        "type": "object",
+        "required": ["data"],
+        "description": "Proposal Types",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/proposalTypes"
+            }
+          }
+        }
+      },
+
+        "getProposal": {
+          "type": "object",
+          "description": "Post Schema for project creation",
+          "properties": {
+            "id":{
+              "type": "string",
+              "description":"id of created proposal",
+              "example":"7c27b43e-1733-4382-bd37-48ca39d719f2"
+            },
+            "title": {
+              "type": "string",
+              "description": "Title of the proposal",
+              "example": "Alzheimer's: Targeting tau protein in Alzheimer's disease."
+            },
+            "leadName": {
+              "type": "string",
+              "description": "Primary Proposal team member name",
+              "example": "John Doe"
+            },
+            "contactEmail": {
+              "type": "string",
+              "description": "email of primary proposal team member",
+              "example": "johndoe@gmail.com"
+            },
+            "organisationWebsite": {
+              "type": "string",
+              "description": "Organisation Website",
+              "example": "sysmex.com"
+            },
+            "body": {
+              "type": "string",
+              "description": "body of proposal. It is combination of body, competative advantage, impact",
+              "example": "{body : Alzheimer's disease, the most common dementing illness, is a relentlessly progressive and fatal brain disorder that begins approximately 10–15 years before any symptoms manifest. More than 47 million people worldwide have Alzheimer's disease, and this number is expected to reach over 131 million by 2050. 1 With increasing prevalence, the global impact of the social, economic, and emotional costs associated with Alzheimer's disease is staggering, and the need for better treatments unquestionable, since currently approved medications provide only symptomatic benefit without affecting the underlying disease process. Despite remarkable advances in our understanding of the molecular pathogenesis of Alzheimer's disease, no new treatments have been approved globally in more than a decade., 'competative advantage': 'Loren epsum', 'impact':'Loren epsum' }"
+            },
+            "summary": {
+              "type": "string",
+              "description": "Summary of proposal",
+              "example": "Tau is the major microtubule associated protein (MAP) of a mature neuron. The other two neuronal MAPs are MAP1 and MAP2. "
+            },
+            "tags": {
+              "type": "string",
+              "description": "Tags given to proposal",
+              "example": "Alzheimer, Tau Protein, Biopharma."
+            },
+            "background":{
+              "type": "string",
+              "description": "background text to proposal",
+              "example": "Tau accumulation and neurofibrillary tangles, like amyloid plaques, are not yet measurable with an available blood test, although research is ongoing.Moreover, the conditions cannot be visualized on a CT or MRI scan. However, PET scanning can identify and measure the amount of accumulation for either of these disease-related proteins. In the case of amyloid, the PET scan won’t identify the stage of dementia because of amyloid’s early accumulation. Tau PET scans, on the other hand, may in the future provide a biomarker measurement that will meaningfully indicate disease progression. Amyloid PET scan tracers, which are already FDA-approved, are often used now to screen candidates for AD clinical trials. They identify the presence of disease but are not useful for measuring disease progression. Tau PET scan tracers have been developed and evidence supports tau PET scanning as a biomarker that reflects the stage of neurodegeneration associated with Alzheimer’s Disease. The first of the tau PET tracers to be approved by the US FDA is F-18 flortaucipir. Many new AD clinical trials are including tau PET scans as a potential biomarker of disease severity."
+            },
+            "type":{
+              "type": "string",
+              "description":"type of proposal",
+              "example":"Healthcare"
+            },
+            "requiredFunding":{
+              "type": "integer",
+              "description":"Required funding for proposal",
+              "example":"100000"
+            },
+            "fundingCurrency":{
+              "type": "string",
+              "description":"Currency of required funding for proposal",
+              "example":"USD"
+            },
+            "area":{
+              "type": "string",
+              "description":"Research area of proposal",
+              "example":"Medical Sciences"
+            },
+            "patentStatus":{
+              "type": "string",
+              "description":"Patent Status of proposal. It will be either filed, pending,not filed, received",
+              "example":"Filed"
+            },
+            "startDate": {
+              "description": "Start date of proposal",
+              "type": "string",
+              "example": "1970-01-20T02:58:48.163Z"
+            },
+            "endDate": {
+              "description": "End date of proposal",
+              "type": "string",
+              "example": "1970-01-20T02:58:48.163Z"
+            },
+            "stage": {
+              "description": "Stage of proposal",
+              "type": "string",
+              "example": "phase 1"
+            },
+            "currentStatus":{
+              "description": "Status of Proposal",
+              "type": "string",
+              "example": "Ongoing"
+            },
+            "teamMembers": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/teamMembers"
+              }
+            },
+            "proposalAssets":{
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/proposalAssets"
+              }
+            },
+            "timeline":{
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/timeline"
+              }
+            },
+            "proposalUpdates":{
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/proposalUpdates"
+              }
+            },
+            "votingDetails":{
+              "type": "object",
+              "properties":{
+                "votingStrategy":{
+                  "type": "string",
+                  "description": "Voting stratergy of proposal",
+                  "example": "staking-erc20-getBalance-of"
+                },
+                "totalVotes":{
+                  "type": "integer",
+                  "description": "total votes received on proposal",
+                  "example": "20000"
+                },
+                "voteYes":{
+                  "type": "integer",
+                  "description": "total positive votes received on proposal",
+                  "example": "15000"
+                },
+                "voteNo": {
+                  "description": "total negative votes received on proposal",
+                  "type": "integer",
+                  "example": "5000"
+                },
+                "voteAbstain": {
+                  "description": "total abstain votes received on proposal",
+                  "type": "integer",
+                  "example": "5000"
+                },
+                "quorum": {
+                  "description": "Quorom of proposal",
+                  "type": "integer",
+                  "example": "25000"
+                },
+                "startDate": {
+                  "description": "start date of voting",
+                  "type": "string",
+                  "example": "1970-01-20T02:58:48.163Z"
+                },
+                "endDate": {
+                  "description": "end date of voting",
+                  "type": "string",
+                  "example": "1970-01-20T02:58:48.163Z"
+                },
+                "status": {
+                  "description": "voting result of proposal",
+                  "type": "string",
+                  "example": "passed"
+                }
+              }
+            },
+            "snapshotUrl":{
+              "description": "Link to proposal created on snapshot",
+              "type": "string",
+              "example": "https://snapshot.org/#/vote.vitadao.eth/proposal/0xcafd8183c8ac4990d99d90b3bd669de2c86376aa361c2384b12d578a49f686c0"
+            }
+          }
+        },
+        "getVoteDetails": {
+          "type": "object",
+          "description": "Post Schema for vote details",
+          "properties": {
+            "id":{
+              "type": "string",
+              "description":"id of proposal",
+              "example":"7c27b43e-1733-4382-bd37-48ca39d719f2"
+            },
+            "votingDetails":{
+              "type": "object",
+              "properties":{
+                "votingStrategy":{
+                  "type": "string",
+                  "description": "Voting stratergy of proposal",
+                  "example": "staking-erc20-getBalance-of"
+                },
+                "totalVotes":{
+                  "type": "integer",
+                  "description": "total votes received on proposal",
+                  "example": "20000"
+                },
+                "voteYes":{
+                  "type": "integer",
+                  "description": "total positive votes received on proposal",
+                  "example": "15000"
+                },
+                "voteNo": {
+                  "description": "total negative votes received on proposal",
+                  "type": "integer",
+                  "example": "5000"
+                },
+                "voteAbstain": {
+                  "description": "total abstain votes received on proposal",
+                  "type": "integer",
+                  "example": "5000"
+                },
+                "quorum": {
+                  "description": "Quorom of proposal",
+                  "type": "integer",
+                  "example": "25000"
+                },
+                "startDate": {
+                  "description": "start date of voting",
+                  "type": "string",
+                  "example": "1970-01-20T02:58:48.163Z"
+                },
+                "endDate": {
+                  "description": "end date of voting",
+                  "type": "string",
+                  "example": "1970-01-20T02:58:48.163Z"
+                },
+                "status": {
+                  "description": "voting result of proposal",
+                  "type": "string",
+                  "example": "passed"
+                }
+              }
+            }
+          }
+        },
+        "proposalStatus":{
+          "type": "object",
+          "description": "Post Schema for proposal Status",
+          "properties": {
+            "startDate": {
+              "type": "string",
+              "description": "start date of phase",
+              "example": "1970-01-20T02:58:48.163Z"
+            },
+            "endDate": {
+              "type": "string",
+              "description": "end date of phase",
+              "example": "1970-01-20T02:58:48.163Z" 
+            },
+            "status":{
+              "type":"string",
+              "description":"status of proposal at the time",
+              "example":"Ongoing"
+            }
+          }
+        },
+        "proposalStatusResponse": {
+          "type": "object",
+          "required": ["data"],
+          "description": "Lifecycle of proposal",
+          "properties": {
+              "id":{
+                "type": "string",
+                "description":"id of proposal",
+                "example":"7c27b43e-1733-4382-bd37-48ca39d719f2"
+              },
+              "proposalLifecycle":{
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/proposalStatus"
+              }
+            }
+          }
+      },
+      "getAllProposalResponse": {
+        "type": "object",
+        "required": ["data"],
+        "description": "Proposal Types",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/getProposal"
+            }
+          }
+        }
+      },
+      "error404Schema": {
+        "type": "object",
+        "required": ["message", "errorCode"],
+        "description": "Error 404 schema",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Record not found"
+          },
+          "errorCode": {
+            "type": "number",
+            "default": 404
+          }
+        }
+      },
+      "error400Schema": {
+        "type": "object",
+        "required": ["message", "errorCode", "field"],
+        "description": "Error 400 schema",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Bad request"
+          },
+          "field": {
+            "type": "array",
+            "description": "Field wise error messages.",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "required": ["key", "message"],
+              "properties": {
+                "key": {
+                  "type": "string",
+                  "description": "Field name",
+                  "example": "contactEmail"
+                },
+                "message": {
+                  "type": "array",
+                  "minItems": 1,
+                  "items": {
+                    "type": "string",
+                    "description": "Error message",
+                    "example": "Invalid contactEmail"
+                  }
+                }
+              }
+            }
+          },
+          "errorCode": {
+            "type": "number",
+            "default": 400
+          }
+        }
+      },
+      "error403Schema": {
+        "required": ["message", "errorCode"],
+        "description": "User don't have required roles and permissions",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "You don't have required permission to perform this operation."
+          },
+          "errorCode": {
+            "type": "number",
+            "default": 403
+          }
+        }
+      },
+      "error401Schema": {
+        "type": "object",
+        "required": ["message", "errorCode"],
+        "description": "Error 404 schema",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Record not found"
+          },
+          "errorCode": {
+            "type": "number",
+            "default": 404
+          }
+        }
+      },
+      "error409Schema": {
+        "type": "object",
+        "required": ["message", "errorCode"],
+        "description": "Error 409 schema",
+        "properties": {
+          "message": {
+            "type": "string",
+            "default": "Conflict occurred"
+          },
+          "errorCode": {
+            "type": "number",
+            "default": 409
+          }
+        }
+      }
+    }
+  }
+}

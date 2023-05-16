@@ -1,0 +1,8 @@
+{
+  "username": "postgres",
+  "password": "secrect",
+  "database": "dao_db",
+  "host": "localhost",
+  "port": 5433,
+  "dialect": "postgres"
+}
